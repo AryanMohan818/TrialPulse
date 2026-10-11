@@ -1,0 +1,251 @@
+:root {
+  --bg: #0d130e;
+  --card-bg: #141f17;
+  --border: #233827;
+  --text-main: #e8f5e9;
+  --text-muted: #81a886;
+  --primary: #4caf50;
+  --primary-hover: #43a047;
+  --accent: #81c784;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 600px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.badge {
+  display: inline-block;
+  background: #1e3a24;
+  color: var(--accent);
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.03em;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1.25rem;
+  font-weight: 700;
+}
+
+.control-group {
+  margin-bottom: 1.25rem;
+}
+
+label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-muted);
+}
+
+select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: #0d1510;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+}
+
+.pill-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pill {
+  flex: 1;
+  padding: 0.6rem;
+  border: 1px solid var(--border);
+  background: #0d1510;
+  color: var(--text-muted);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.pill.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.primary-btn {
+  width: 100%;
+  padding: 0.85rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  margin-top: 0.5rem;
+}
+
+.primary-btn:hover {
+  background: var(--primary-hover);
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.model-badge {
+  background: #1b3821;
+  color: var(--accent);
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.time-badge {
+  background: #252b26;
+  color: #bbb;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.mission-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  background: #0b110c;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--primary);
+  margin-bottom: 1.25rem;
+}
+
+.action-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.secondary-btn, .dark-btn {
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.secondary-btn {
+  background: #233a28;
+  color: #e8f5e9;
+}
+
+.dark-btn {
+  background: #1b1b1b;
+  color: #ff9800;
+  border: 1px solid #333;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Pocket Disconnect Mode */
+.pocket-overlay {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.pocket-content .leaf-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.1); opacity: 1; }
+}
+
+.timer {
+  font-size: 3.5rem;
+  font-weight: 800;
+  font-family: monospace;
+  color: var(--primary);
+  margin: 1.5rem 0;
+}
+
+.exit-btn {
+  padding: 0.75rem 1.5rem;
+  background: #222;
+  color: #888;
+  border: 1px solid #444;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+footer {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 1rem;
+}

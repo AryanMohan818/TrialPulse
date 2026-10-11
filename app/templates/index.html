@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TrailPulse — Touch Grass Outdoor Companion</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">🌱 Hacktoberfest 2026: Touch Grass</div>
+      <h1>TrailPulse</h1>
+      <p class="subtitle">Open AI designed to make screen time short and outdoor time real.</p>
+    </header>
+
+    <main>
+      <div class="card form-card">
+        <h2>Plan Your 30-Second Micro-Mission</h2>
+        
+        <div class="control-group">
+          <label for="environment">Outdoor Environment</label>
+          <select id="environment">
+            <option value="park">Public Park / Green Space</option>
+            <option value="trail">Hiking / Forest Trail</option>
+            <option value="backyard">Backyard / Balcony Garden</option>
+            <option value="urban">Urban Sidewalk / City Walk</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="duration">Available Time (Minutes)</label>
+          <div class="pill-buttons">
+            <button class="pill active" data-time="10">10m</button>
+            <button class="pill" data-time="20">20m</button>
+            <button class="pill" data-time="30">30m</button>
+            <button class="pill" data-time="60">60m</button>
+          </div>
+        </div>
+
+        <button id="generateBtn" class="primary-btn">Generate Outdoor Mission 🌿</button>
+      </div>
+
+      <div id="resultCard" class="card result-card hidden">
+        <div class="result-header">
+          <span id="modelTag" class="model-badge">Open-Weight AI</span>
+          <span id="durationTag" class="time-badge">15 Mins</span>
+        </div>
+        <div id="missionContent" class="mission-text"></div>
+
+        <div class="action-row">
+          <button id="speakBtn" class="secondary-btn">🔊 Listen (Hands-Free)</button>
+          <button id="disconnectBtn" class="dark-btn">📵 Disconnect & Touch Grass</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Disconnect Fullscreen Screen-Saver -->
+    <div id="pocketMode" class="pocket-overlay hidden">
+      <div class="pocket-content">
+        <div class="leaf-icon">🍃</div>
+        <h2>Screen Locked. You're Outdoors.</h2>
+        <p>Put your phone away and take in the fresh air.</p>
+        <div id="timerDisplay" class="timer">10:00</div>
+        <button id="exitPocketBtn" class="exit-btn">I'm Back (End Session)</button>
+      </div>
+    </div>
+
+    <footer>
+      <p>Powered by open-source weights (Gemma 2) &middot; Zero tracking &middot; Runs anywhere</p>
+    </footer>
+  </div>
+
+  <script>
+    let selectedDuration = 10;
+    let timerInterval = null;
+
+    document.querySelectorAll('.pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.pill').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedDuration = parseInt(btn.dataset.time);
+      });
+    });
+
+    const generateBtn = document.getElementById('generateBtn');
+    const resultCard = document.getElementById('resultCard');
+    const missionContent = document.getElementById('missionContent');
+    const modelTag = document.getElementById('modelTag');
+    const durationTag = document.getElementById('durationTag');
+    const speakBtn = document.getElementById('speakBtn');
+    const disconnectBtn = document.getElementById('disconnectBtn');
+    const pocketMode = document.getElementById('pocketMode');
+    const exitPocketBtn = document.getElementById('exitPocketBtn');
+    const timerDisplay = document.getElementById('timerDisplay');
+
+    generateBtn.addEventListener('click', async () => {
+      generateBtn.disabled = true;
+      generateBtn.innerText = "Consulting Nature Engine...";
+      
+      const env = document.getElementById('environment').value;
+
+      try {
+        const res = await fetch('/api/mission', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            environment: env,
+            duration_minutes: selectedDuration
+          })
+        });
+        const data = await res.json();
+
+        modelTag.innerText = data.model;
+        durationTag.innerText = `${data.duration} Mins`;
+        missionContent.innerText = data.mission_markdown;
+        resultCard.classList.remove('hidden');
+      } catch (err) {
+        alert("Failed to load mission. Check console.");
+      } finally {
+        generateBtn.disabled = false;
+        generateBtn.innerText = "Generate Outdoor Mission 🌿";
+      }
+    });
+
+    speakBtn.addEventListener('click', () => {
+      const text = missionContent.innerText;
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 0.95;
+        window.speechSynthesis.speak(utterance);
+      } else {
+        alert("Audio speech synthesis is not supported on this browser.");
+      }
+    });
+
+    disconnectBtn.addEventListener('click', () => {
+      pocketMode.classList.remove('hidden');
+      let remaining = selectedDuration * 60;
+      
+      const updateTimer = () => {
+        const mins = Math.floor(remaining / 60);
+        const secs = remaining % 60;
+        timerDisplay.innerText = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        if (remaining <= 0) {
+          clearInterval(timerInterval);
+        }
+        remaining--;
+      };
+      
+      updateTimer();
+      timerInterval = setInterval(updateTimer, 1000);
+    });
+
+    exitPocketBtn.addEventListener('click', () => {
+      clearInterval(timerInterval);
+      pocketMode.classList.add('hidden');
+    });
+  </script>
+</body>
+</html>

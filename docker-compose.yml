@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  trailpulse:
+    build: .
+    container_name: trailpulse_app
+    ports:
+      - "8000:8000"
+    environment:
+      - HF_TOKEN=${HF_TOKEN:-}
+    volumes:
+      - ./app:/app/app
+    restart: unless-stopped
